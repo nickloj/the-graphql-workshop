@@ -15,7 +15,7 @@
     "build": "slidev build",
     "start": "slidev --open",
     "export": "slidev export",
-    "db:up": "docker compose up -d",
+    "db:up": "docker-compose up -d",
     "db:migrate": "postgrator",
     "db:down": "docker compose down",
     "lint": "eslint .",

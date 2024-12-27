@@ -16,7 +16,7 @@ const owners = {
   }
 }
 
-const schema = `
+const typeDefs = `
   type Person {
     name: String!
   }
@@ -39,12 +39,12 @@ const resolvers = {
   }
 }
 
-const loaders = {
-  Pet: {
-    async owner(queries) {
-      return queries.map(({ obj: pet }) => owners[pet.name])
-    }
-  }
-}
+// const loaders = {
+//   Pet: {
+//     async owner(queries) {
+//       return queries.map(({ obj: pet }) => owners[pet.name])
+//     }
+//   }
+// }
 
-export { schema, resolvers, loaders }
+export { typeDefs, resolvers }
