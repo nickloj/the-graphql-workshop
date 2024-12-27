@@ -2,19 +2,26 @@ import { posts } from '../data.js'
 
 const service2 = {
   schema: `
-  type Post @key(fields: "id") {
-    id: ID!
-    title: String
-    content: String
-    author: User
-  }
+   enum Role {
+      ADMIN
+      VERIFIED
+    }
 
-  type User @key(fields: "id") @extends {
-    id: ID! @external
-    name: String @external
-    posts: [Post]
-  }
-`,
+    directive @auth(role: Role) on OBJECT | FIELD_DEFINITION
+
+    type Post @key(fields: "id") {
+      id: ID!
+      title: String
+      content: String
+      author: User @auth(role: ADMIN)
+    }
+
+    type User @key(fields: "id") @extends {
+      id: ID! @external
+      name: String @external
+      posts: [Post]
+    }`,
+
   resolvers: {
     Post: {
       author: post => {

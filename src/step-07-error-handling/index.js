@@ -1,8 +1,7 @@
 import Fastify from 'fastify'
-import mercurius from 'mercurius'
-import { schema, resolvers } from './graphql.js'
+import mercuriusGateway from '@mercuriusjs/gateway'
 
-export default function buildServer() {
+export default function buildGateway() {
   const server = Fastify({
     logger: {
       transport: {
@@ -11,10 +10,15 @@ export default function buildServer() {
     }
   })
 
-  server.register(mercurius, {
-    schema,
-    resolvers,
-    graphiql: true
+  server.register(mercuriusGateway, {
+    jit: 1,
+    graphiql: true,
+    gateway: {
+      services: [
+        { name: 'users', url: 'http://localhost:4001/graphql' },
+        { name: 'posts', url: 'http://localhost:4002/graphql' }
+      ]
+    }
   })
 
   return server

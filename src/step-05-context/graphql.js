@@ -23,12 +23,16 @@ const schema = `
   }
 
   type Query {
+    add(x: Int!, y: Int!): Int
     getUserByLocale: User
   }
 `
 
 const resolvers = {
   Query: {
+    add(_, { x, y }) {
+      return x + y
+    },
     getUserByLocale(_, __, context) {
       return users.find(u => u.locale === context.locale)
     }

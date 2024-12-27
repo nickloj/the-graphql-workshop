@@ -1,5 +1,6 @@
 import Fastify from 'fastify'
 import mercuriusGateway from '@mercuriusjs/gateway'
+import mercuriusAuth from 'mercurius-auth'
 
 export default function buildGateway() {
   const gateway = Fastify({
@@ -25,6 +26,24 @@ export default function buildGateway() {
         }
       ]
     }
+  })
+
+  gateway.register(mercuriusAuth, {
+    authContext(context) {
+      return {
+        role: context.reply.request.headers['x-role']
+      }
+    },
+    async applyPolicy(authDirectiveAST, parent, args, context, info) {
+      const directiveRole = authDirectiveAST.arguments.find(
+        arg => arg.name.value === 'role'
+      ).value.value
+
+      return (
+        context.auth.role === directiveRole || context.auth.role === 'ADMIN'
+      )
+    },
+    authDirective: 'auth'
   })
 
   return gateway

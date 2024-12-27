@@ -2,14 +2,23 @@ import { users } from '../data.js'
 
 const service1 = {
   schema: `
-  extend type Query {
-    me: User
-  }
-  
-  type User @key(fields: "id") {
-    id: ID!
-    name: String!
-  }
+    enum Role {
+      ADMIN
+      VERIFIED
+    }
+
+    directive @auth(
+      role: Role
+    ) on OBJECT | FIELD_DEFINITION
+
+    extend type Query {
+      me: User @auth(role: VERIFIED)
+    }
+    
+    type User @key(fields: "id") {
+      id: ID!
+      name: String!
+    }
   `,
 
   resolvers: {

@@ -1,7 +1,7 @@
 import Fastify from 'fastify'
 import mercurius from 'mercurius'
 import config from './lib/config.js'
-import { schema, resolvers, loaders } from './graphql.js'
+import { schema, resolvers, loaders, context } from './graphql.js'
 
 export default function buildServer() {
   const server = Fastify(config)
@@ -14,6 +14,7 @@ export default function buildServer() {
     schema,
     resolvers,
     loaders,
+    context,
     graphiql: true
   })
 
